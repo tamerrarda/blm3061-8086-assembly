@@ -1,0 +1,18 @@
+# Build artifacts
+*.OBJ
+*.obj
+*.EXE
+*.exe
+*.MAP
+*.map
+*.LST
+*.lst
+*.CRF
+*.crf
+
+# Toolchain binaries (not redistributable)
+masm*/
+
+# Personal / submission files
+*.pdf
+*.txt

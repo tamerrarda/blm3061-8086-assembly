@@ -1,0 +1,51 @@
+			.8086
+mystack		SEGMENT PARA STACK 'yigin'
+			DW 20 DUP(?)
+mystack		ENDS
+mydata		SEGMENT PARA 'veri'
+PARK_SURELERI	DW 2, 5, 1, 8, 3
+N			DW 5
+SAAT_UCRETI	DW 20
+UCRETLER	DW 5 DUP(0)
+ORTALAMA_UCRET	DW 0
+ORTALAMA_USTU_SAYISI	DW 0
+mydata		ENDS
+mycode 		SEGMENT PARA 'kod'
+			ASSUME CS:mycode, DS:mydata, SS:mystack
+ANA			PROC FAR
+			PUSH DS
+			XOR AX, AX
+			PUSH AX
+			MOV AX, mydata
+			MOV DS, AX
+
+			MOV CX, N
+			XOR SI, SI
+			XOR BX, BX			; BX = sum of fees
+UCRET_DONGU:	MOV AX, PARK_SURELERI[SI]
+			MUL SAAT_UCRETI		; DX:AX = AX * SAAT_UCRETI
+			MOV UCRETLER[SI], AX
+			ADD BX, AX
+			ADD SI, 2
+			LOOP UCRET_DONGU
+
+			MOV AX, BX
+			XOR DX, DX
+			DIV N				
+			MOV ORTALAMA_UCRET, AX
+
+			MOV CX, N
+			XOR SI, SI
+			XOR BX, BX			; BX = count above average
+SAY_DONGU:	CMP UCRETLER[SI], AX
+			JBE ATLA
+			INC BX
+ATLA:		ADD SI, 2
+			LOOP SAY_DONGU
+			MOV ORTALAMA_USTU_SAYISI, BX
+
+SONUCLAR_HAZIR:	RETF
+
+ANA			ENDP
+mycode		ENDS
+			END ANA
